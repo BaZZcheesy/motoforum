@@ -1,0 +1,1 @@
+// save token in local browser storage when authenticating
