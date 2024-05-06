@@ -1,0 +1,15 @@
+version: '3.1'
+
+networks:
+  M223:
+
+services:
+  mysql:
+    build: ./database
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=secretpw
+      - MYSQL_USER=dbadmin
+    networks:
+      - M223
