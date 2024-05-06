@@ -27,7 +27,7 @@ public class WebSecurityConfig {
     @Autowired
     private AuthenticationEntryPoint unauthorizedHandler;
     private final static String[] EVERYONE = { "/api/auth/**", "/category", "/quiz", "/public","/public/items" };
-    private final static String[] SECURE = { "/question" };
+    private final static String[] SECURE = { "/private" };
     private final static String[] ROLES = { "MODERATOR", "ADMIN" };
 
     @Bean
