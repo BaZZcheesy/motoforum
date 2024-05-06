@@ -21,24 +21,25 @@ public class DataBaseLoader implements CommandLineRunner {
     private final RoleRepository roleRepository;
 
     @Autowired
-    public DataBaseLoader(PasswordEncoder passwordEncoder, RoleRepository roleRepository,
-            UserRepository userRepository) {
+    public DataBaseLoader(PasswordEncoder passwordEncoder, RoleRepository roleRepository, UserRepository userRepository) {
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
     }
 
-    // Hier werden die Testdaten erstellt und in die Datenbank gespeichert.
     @Override
     public void run(String... strings) throws Exception {
-        if (roleRepository.count() > 0) {
-            return;
+        if(roleRepository.count() == 0) {
+            this.roleRepository.save(new Role(ERole.ROLE_USER));
+            this.roleRepository.save(new Role(ERole.ROLE_ADMIN));
+            this.roleRepository.save(new Role(ERole.ROLE_MODERATION));
         }
-        this.roleRepository.save(new Role(ERole.ROLE_USER));
-        this.roleRepository.save(new Role(ERole.ROLE_ADMIN));
-        User user = new User("janedoe", "jane.doe@email.com", passwordEncoder.encode("p@ssw0rd"));
-        user.setRoles(new HashSet<>(Arrays.asList(
-                roleRepository.findByRole(ERole.ROLE_USER).get())));
-        this.userRepository.save(user);
+        if (userRepository.count() == 0) {
+            User user = new User("janedoe", "jane.doe@email.com",
+                passwordEncoder.encode("p@ssw0rd"));
+            user.setRoles(new HashSet<>(Arrays.asList(
+                    roleRepository.findByRole(ERole.ROLE_USER).get())));
+            this.userRepository.save(user);
+        }
     }
 }

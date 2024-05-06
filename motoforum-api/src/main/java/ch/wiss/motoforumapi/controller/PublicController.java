@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -33,13 +32,11 @@ public class PublicController {
         }
     }
 
-    @CrossOrigin
     @GetMapping("/public")
     public ResponseEntity<String> getPublicPart() {
         return ResponseEntity.ok("Dies ist der Public Teil ");
     }
 
-    @CrossOrigin
     @GetMapping("/public/items")
     public ResponseEntity<List<DemoData>> getPublicDemoData(){
 
