@@ -17,15 +17,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import ch.wiss.motoforumapi.models.ERole;
+import ch.wiss.motoforumapi.models.Role;
+import ch.wiss.motoforumapi.models.User;
 import ch.wiss.motoforumapi.repository.RoleRepository;
 import ch.wiss.motoforumapi.repository.UserRepository;
 import ch.wiss.motoforumapi.request.LoginRequest;
 import ch.wiss.motoforumapi.request.SignupRequest;
-import ch.wiss.motoforumapi.security.ERole;
 import ch.wiss.motoforumapi.security.JwtResponse;
 import ch.wiss.motoforumapi.security.JwtUtils;
-import ch.wiss.motoforumapi.security.Role;
-import ch.wiss.motoforumapi.security.User;
 import ch.wiss.motoforumapi.security.UserDetailsImpl;
 import ch.wiss.motoforumapi.security.MessageResponse;
 import jakarta.validation.Valid;

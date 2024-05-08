@@ -1,8 +1,6 @@
-// save token in local browser storage when authenticating
-
-import axios from "axios";
 import React, { useState, useEffect } from "react";
 import {Link} from "react-router-dom";
+
 
 const baseUrl = "http://localhost:8080/"
 const roles = ["user"];
@@ -27,19 +25,25 @@ const Register = () => {
 
     const handleSubmit = async (event) => {
         console.log("Sending to server" + username + " " + email + " " + password)
-        fetch(baseUrl + "api/auth/signup", {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({username, email, password, roles})
-        }).then(response => {
-            // Improve error handling
-            if (response.status === 200) {
+        event.preventDefault();
+        try {
+            await fetch(baseUrl + "api/auth/signup", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({username, email, password, roles})
+            }).then(response => {
+                // Improve error handling
+                if (!response.status === 200) {
+                    alert("Something went wrong")
+                }
                 alert("User created succsessfully");
-            }
-            alert("Something went wrong")
-        })
+            })
+        }
+        catch (ex) {
+            console.log("Exception occured: " + ex)
+        }
     }
 
     return (

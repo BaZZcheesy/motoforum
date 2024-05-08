@@ -8,11 +8,11 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import ch.wiss.motoforumapi.models.ERole;
+import ch.wiss.motoforumapi.models.Role;
+import ch.wiss.motoforumapi.models.User;
 import ch.wiss.motoforumapi.repository.RoleRepository;
 import ch.wiss.motoforumapi.repository.UserRepository;
-import ch.wiss.motoforumapi.security.ERole;
-import ch.wiss.motoforumapi.security.Role;
-import ch.wiss.motoforumapi.security.User;
 
 @Component
 public class DataBaseLoader implements CommandLineRunner {

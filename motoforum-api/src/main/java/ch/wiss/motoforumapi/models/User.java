@@ -1,4 +1,4 @@
-package ch.wiss.motoforumapi.security;
+package ch.wiss.motoforumapi.models;
 
 import java.util.HashSet;
 import java.util.Set;

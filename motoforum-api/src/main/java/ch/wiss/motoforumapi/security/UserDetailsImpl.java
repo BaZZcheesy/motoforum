@@ -11,6 +11,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import ch.wiss.motoforumapi.models.User;
+
 public class UserDetailsImpl implements UserDetails {
     private static final long serialVersionUID = 1L;
     private Long id;

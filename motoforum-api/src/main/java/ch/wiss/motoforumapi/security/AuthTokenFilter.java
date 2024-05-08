@@ -9,6 +9,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
+
+import ch.wiss.motoforumapi.service.UserDetailsServiceImpl;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import jakarta.servlet.FilterChain;

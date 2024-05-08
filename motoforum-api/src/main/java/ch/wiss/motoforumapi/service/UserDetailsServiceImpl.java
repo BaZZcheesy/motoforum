@@ -1,4 +1,4 @@
-package ch.wiss.motoforumapi.security;
+package ch.wiss.motoforumapi.service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +10,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import ch.wiss.motoforumapi.models.Role;
+import ch.wiss.motoforumapi.models.User;
 import ch.wiss.motoforumapi.repository.UserRepository;
+import ch.wiss.motoforumapi.security.UserDetailsImpl;
 import jakarta.transaction.Transactional;
 
 @Service

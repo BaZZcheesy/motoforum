@@ -1,4 +1,4 @@
-package ch.wiss.motoforumapi.security;
+package ch.wiss.motoforumapi.models;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

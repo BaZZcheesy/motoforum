@@ -1,6 +1,3 @@
-// save token in local browser storage when authenticating
-
-import axios from "axios";
 import React, { useState } from 'react'
 import {Link} from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
@@ -24,21 +21,30 @@ const Login = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            const response = await axios.post(baseUrl + "api/auth/signin", {
-                username,
-                password
-            });
-            if (response.data.accessToken) {
-                localStorage.setItem("jwt_token", response.data.accessToken);
-                localStorage.setItem('user', JSON.stringify(response.data.user));
-                // setUser(response.data.user);
-                navigate('/');
-            }
+            await fetch(baseUrl + "api/auth/signin", {
+                headers : {
+                    'Content-Type' : 'application/json'
+                },
+                body: JSON.stringify(
+                    username,
+                    password
+                )
+            }).then( response => {
+                if (response.data.accessToken) {
+                    localStorage.setItem("jwt_token", response.data.accessToken);
+                    localStorage.setItem("user", response.data.username);
+                    console.log(response.data)
+                    // setUser(response.data.user);
+                    navigate("/");
+                }
+                else {
+                    console.log("Login failed")
+                }
+            })  
         } catch (error) {
-            console.error('Login failed:', error);
+            console.error("Login failed:", error);
         }
     };
-
 
     return (
         <>
