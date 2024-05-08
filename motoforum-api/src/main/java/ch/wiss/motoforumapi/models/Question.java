@@ -1,22 +1,35 @@
 package ch.wiss.motoforumapi.models;
 
+import java.util.Set;
+
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotBlank;
 
 @Entity
 public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    public Integer id;
 
     @NotBlank
-    private String question;
+    public String question;
 
     @NotBlank
-    private Integer questioner;
+    @OneToOne
+    @JoinColumn( name = "user_id")
+    private User questioner;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "question")
+    public Set<Reply> replies;
+
+
 
     public Question() {
 
@@ -33,11 +46,11 @@ public class Question {
         this.question = question;
     }
 
-    public int getQuestioner() {
-        return questioner;
-    }
+    //public User getQuestioner() {
+    //    return questioner;
+    //}
 
-    public void setQuestioner(int questioner) {
-        this.questioner = questioner;
-    }
+    //public void setQuestioner(User questioner) {
+    //    this.questioner = questioner;
+    //}
 }

@@ -4,6 +4,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotBlank;
 
 @Entity
@@ -15,14 +18,16 @@ public class Reply {
     @NotBlank
     public String reply;
     
-    @NotBlank
-    public Integer replier;
+    @OneToOne
+    @JoinColumn( name = "user_id" )
+    public User replier;
 
-    @NotBlank
-    public Integer question;
+    @ManyToOne
+    @JoinColumn(name = "question_id")
+    private Question question;
 
     public Reply() {
-        
+
     }
 
     public Integer getId() {
@@ -37,21 +42,19 @@ public class Reply {
         this.reply = reply;
     }
 
-    public Integer getReplier() {
+    public User getReplier() {
         return replier;
     }
 
-    public void setReplier(Integer replier) {
+    public void setReplier(User replier) {
         this.replier = replier;
     }
 
-    public Integer getQuestion() {
+    public Question getQuestion() {
         return question;
     }
 
-    public void setQuestion(Integer question) {
+    public void setQuestion(Question question) {
         this.question = question;
     }
-
-    
 }
