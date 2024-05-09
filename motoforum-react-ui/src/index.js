@@ -2,7 +2,7 @@ import * as React from 'react'
 import * as ReactDOM from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import App from './components/App'
-import Login from './components/Login'
+import Login from './components/login'
 import Register from './components/Register'
 import Questions from './components/Questions'
 

@@ -2,6 +2,7 @@ package ch.wiss.motoforumapi.models;
 
 import java.util.Set;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -29,7 +30,9 @@ public class Question {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "question")
     public Set<Reply> replies;
 
-
+    public Question() {
+        
+    }
 
     public Question(String question, User user) {
         this.question = question;

@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 const baseUrl = "http://localhost:8080/";
 
 let token = localStorage.getItem("jwt_token");
 
 const Questions = () => {
-    const [question, setQuestion] = useState("")
-    const [questions, setQuestions] = useState("")
+    const [question, setQuestion] = useState("");
+    const [questions, setQuestions] = useState([]);
 
     const handleQuestionChange = event => {
         setQuestion(event.target.value)
@@ -14,34 +15,29 @@ const Questions = () => {
 
     const loadData = async () => {
         try {
-            await fetch(baseUrl + "question/get", {
-                method: "POST",
+            const response = await axios.post(baseUrl + "question/get", { token }, {
                 headers: {
+                    'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(token)
-            }).then( response => {
-                setQuestions(response)
-            })
+                }
+            });
+            setQuestions(response.data);
+        } catch (ex) {
+            console.log(ex);
         }
-        catch (ex) {
-            console.log(ex)
-        }
-    } 
+    }
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            await fetch(baseUrl + "question/ask", {
-                method: "POST",
-                headers : {
+            await axios.post(baseUrl + "question/ask", { question, token }, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({question, token})
-            })
-            console.log(token)
-        }
-        catch (ex) {
+                }
+            });
+            loadData(); // Reload questions after submitting a new one
+        } catch (ex) {
             console.log(ex);
         }
     }
@@ -57,7 +53,16 @@ const Questions = () => {
             </div>
             <div>
                 <button onClick={loadData}></button>
-                <h1 value={questions}></h1>
+                <h1>Questions</h1>
+                <ul>
+                    {questions.map(question => (
+                        <li key={question.id}>
+                            <p>{question.question}</p>
+                            {/*<p>Questioner: {question.questioner.username}</p>*/}
+                            {/* Add rendering for replies if needed */}
+                        </li>
+                    ))}
+                </ul>
             </div>
         </>
     )

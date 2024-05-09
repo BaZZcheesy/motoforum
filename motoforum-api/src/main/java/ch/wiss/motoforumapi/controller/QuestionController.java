@@ -19,6 +19,7 @@ import ch.wiss.motoforumapi.repository.QuestionRepository;
 import ch.wiss.motoforumapi.repository.UserRepository;
 import ch.wiss.motoforumapi.security.JwtUtils;
 import ch.wiss.motoforumapi.security.MessageResponse;
+import jakarta.servlet.http.HttpServletRequest;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -34,8 +35,9 @@ public class QuestionController {
     ObjectMapper om = new ObjectMapper();
 
     @PostMapping("/ask")
-    public ResponseEntity<?> askQuestion(@RequestBody String question) {
+    public ResponseEntity<?> askQuestion(HttpServletRequest request, @RequestBody String question) {
         try {
+            System.out.println(question);
             QuestionRequest questionRequest = om.readValue(question, QuestionRequest.class);
             String username = jwtUtils.getUserNameFromJwtToken(questionRequest.getToken());
             var user = ur.findByUsername(username);
@@ -59,8 +61,7 @@ public class QuestionController {
     }
 
     @PostMapping("/get")
-    public List<Question> getQuestions(@RequestBody String request) {
-        System.out.println(request);
+    public List<Question> getQuestions() {
         return qr.findAll();
     }
 }
