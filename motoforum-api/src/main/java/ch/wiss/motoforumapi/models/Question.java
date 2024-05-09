@@ -21,7 +21,7 @@ public class Question {
     @NotBlank
     public String question;
 
-    @NotBlank
+    //@NotBlank
     @OneToOne
     @JoinColumn( name = "user_id")
     private User questioner;
@@ -31,9 +31,11 @@ public class Question {
 
 
 
-    public Question() {
-
+    public Question(String question, User user) {
+        this.question = question;
+        this.questioner = user;
     }
+
     public Integer getId() {
         return id;
     }
