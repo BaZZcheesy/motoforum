@@ -42,6 +42,20 @@ const Questions = () => {
         }
     }
 
+    const handleAnswer = async (questionId, reply) => {
+        try {
+            await axios.post(baseUrl + "reply/insert", { reply, token, questionId }, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            loadData(); // Reload questions after submitting an answer
+        } catch (ex) {
+            console.log(ex);
+        }
+    }
+
     return(
         <>
             <div>
@@ -60,6 +74,15 @@ const Questions = () => {
                             <p>{question.question}</p>
                             {/*<p>Questioner: {question.questioner.username}</p>*/}
                             {/* Add rendering for replies if needed */}
+                            <form onSubmit={(e) => {
+                                e.preventDefault();
+                                const reply = prompt("Enter your answer:");
+                                if (reply !== null) {
+                                    handleAnswer(question.id, reply);
+                                }
+                            }}>
+                                <button type="submit">Answer</button>
+                            </form>
                         </li>
                     ))}
                 </ul>

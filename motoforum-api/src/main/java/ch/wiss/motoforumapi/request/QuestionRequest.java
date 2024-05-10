@@ -1,4 +1,4 @@
-package ch.wiss.motoforumapi.models;
+package ch.wiss.motoforumapi.request;
 
 public class QuestionRequest {
     public String question;

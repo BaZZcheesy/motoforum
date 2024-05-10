@@ -13,9 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ch.wiss.motoforumapi.models.Question;
-import ch.wiss.motoforumapi.models.QuestionRequest;
 import ch.wiss.motoforumapi.repository.QuestionRepository;
+import ch.wiss.motoforumapi.repository.ReplyRepository;
 import ch.wiss.motoforumapi.repository.UserRepository;
+import ch.wiss.motoforumapi.request.QuestionRequest;
 import ch.wiss.motoforumapi.security.JwtUtils;
 import ch.wiss.motoforumapi.security.MessageResponse;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,6 +29,8 @@ public class QuestionController {
     public QuestionRepository qr;
     @Autowired
     public UserRepository ur;
+    @Autowired
+    public ReplyRepository rr;
     @Autowired
     private JwtUtils jwtUtils;
 

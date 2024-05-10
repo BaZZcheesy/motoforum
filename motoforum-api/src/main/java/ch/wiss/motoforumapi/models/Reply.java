@@ -6,21 +6,20 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotBlank;
 
 @Entity
 public class Reply {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Integer id;
+    private Integer id;
 
     @NotBlank
-    public String reply;
-    
-    @OneToOne
-    @JoinColumn( name = "user_id" )
-    public User replier;
+    private String reply;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User replier;
 
     @ManyToOne
     @JoinColumn(name = "question_id")
@@ -28,6 +27,12 @@ public class Reply {
 
     public Reply() {
 
+    }
+
+    public Reply(String reply, User replier, Question replyToQuestion) {
+        this.reply = reply;
+        this.replier = replier;
+        this.question = replyToQuestion;
     }
 
     public Integer getId() {
