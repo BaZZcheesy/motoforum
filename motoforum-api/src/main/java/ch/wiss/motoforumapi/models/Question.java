@@ -48,11 +48,21 @@ public class Question {
         this.question = question;
     }
 
-    //public User getQuestioner() {
-    //    return questioner;
-    //}
+    public List<Reply> getReplies() {
+        return replies;
+    }
 
-    //public void setQuestioner(User questioner) {
-    //    this.questioner = questioner;
-    //}
+    public void setReplies(List<Reply> replies) {
+        this.replies = replies;
+    }
+
+    public User getQuestioner() {
+        return questioner;
+    }
+
+    public void setQuestioner(User questioner) {
+        this.questioner = questioner;
+    }
+
+    
 }

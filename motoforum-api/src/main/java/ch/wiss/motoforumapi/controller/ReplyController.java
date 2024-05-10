@@ -36,7 +36,8 @@ public class ReplyController {
         try {
             ObjectMapper om = new ObjectMapper();
             ReplyRequest replyRequest = om.readValue(replyData, ReplyRequest.class);
-            String username = ju.getUserNameFromJwtToken(replyRequest.getToken());
+            String token = request.getHeader("Authorization").replace("Bearer ", "");
+            String username = ju.getUserNameFromJwtToken(token);
             var user = ur.findByUsername(username);
             if (user == null) {
                 return ResponseEntity

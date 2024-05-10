@@ -2,17 +2,7 @@ package ch.wiss.motoforumapi.request;
 
 public class ReplyRequest {
     private String reply;
-    private String token;
     private Long questionId;
-
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
 
     public Long getQuestionId() {
         return questionId;
