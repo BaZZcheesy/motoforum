@@ -38,10 +38,10 @@ public class UserController {
         return ju.getUserNameFromJwtToken(token);
     }
 
-    @GetMapping("/{username}")
-    public ResponseEntity<?> getUser(@PathVariable String username) {
+    @GetMapping("/{userId}")
+    public ResponseEntity<?> getUser(@PathVariable Long userId) {
         try {
-            Optional<User> userToFetch = ur.findByUsername(username);
+            Optional<User> userToFetch = ur.findById(userId);
             if (userToFetch.isPresent()) {
                 User user = userToFetch.get();
                 return ResponseEntity
@@ -60,8 +60,8 @@ public class UserController {
 
     // Update property
     @PutMapping("/{userId}/{valueToUpdate}")
-    public ResponseEntity<?> updateValue(@RequestBody String requestBody, @PathVariable Long id,
-            @PathVariable String valueToUpdate) {
+    public ResponseEntity<?> updateValue(@RequestBody String requestBody, @PathVariable("userId") Long id,
+            @PathVariable("valueToUpdate") String valueToUpdate) {
         try {
             ObjectMapper om = new ObjectMapper();
             EditRequest editRequest = om.readValue(requestBody, EditRequest.class);
@@ -79,7 +79,7 @@ public class UserController {
                         .badRequest()
                         .body(new MessageResponse("We cant authenticate the user"));
             }
-            if (!actor.get().isAdmin() || !actor.get().isModerator()) {
+            if (!actor.get().isAdmin() && !actor.get().isModerator()) {
                 if (!userToUpdate.getPassword().equals(encoder.encode(editRequest.getPassword()))
                         || !userToUpdate.getUsername().equals(actorUsername)) {
                     return ResponseEntity
@@ -140,23 +140,23 @@ public class UserController {
             if (userToDelete.isEmpty()) {
                 return ResponseEntity
                         .badRequest()
-                        .body(new MessageResponse("Reply not found"));
+                        .body(new MessageResponse("User to delete not found"));
             }
 
             System.out.println(actor.get().getRoles() +"\n" + userToDelete.get().getRoles());
 
-            if (actor.get().isAdmin() || actor.get().isModerator()) {
+            if (!actor.get().isAdmin() && !actor.get().isModerator()) {
                 if (!actor.get().getPassword().equals(userToDelete.get().getPassword())
                         && !actor.get().getUsername().equals(userToDelete.get().getUsername()))
                     return ResponseEntity
                             .badRequest()
-                            .body(new MessageResponse("You are not authorized to delete this reply"));
+                            .body(new MessageResponse("You are not authorized to delete this user"));
             }
 
             ur.delete(userToDelete.get());
             return ResponseEntity
                     .ok()
-                    .body(new MessageResponse("Reply deleted successfully"));
+                    .body(new MessageResponse("User deleted successfully"));
         } catch (Exception ex) {
             return ResponseEntity
                     .internalServerError()

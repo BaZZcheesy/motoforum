@@ -140,10 +140,12 @@ public class QuestionController {
                         .body(new MessageResponse("Reply not found"));
             }
 
-            if (!questionToDelete.get().getQuestioner().equals(user.get()) || !user.get().isAdmin() || !user.get().isModerator()) {
-                return ResponseEntity
-                        .badRequest()
-                        .body(new MessageResponse("You are not authorized to delete this reply"));
+            if (!user.get().isAdmin() && !user.get().isModerator()) {
+                if (!questionToDelete.get().getQuestioner().equals(user.get())) {
+                    return ResponseEntity
+                            .badRequest()
+                            .body(new MessageResponse("You are not authorized to delete this reply"));
+                }
             }
 
             qr.delete(questionToDelete.get());

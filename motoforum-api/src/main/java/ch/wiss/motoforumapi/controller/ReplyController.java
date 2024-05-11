@@ -95,10 +95,12 @@ public class ReplyController {
                         .body(new MessageResponse("Reply not found"));
             }
 
-            if (!reply.get().getReplier().equals(user.get()) || !user.get().isAdmin() || !user.get().isModerator()) {
-                return ResponseEntity
+            if (!user.get().isAdmin() && !user.get().isModerator()) {
+                if (!reply.get().getReplier().equals(user.get())) {
+                    return ResponseEntity
                         .badRequest()
                         .body(new MessageResponse("You are not authorized to delete this reply"));
+                }
             }
 
             rr.delete(reply.get());

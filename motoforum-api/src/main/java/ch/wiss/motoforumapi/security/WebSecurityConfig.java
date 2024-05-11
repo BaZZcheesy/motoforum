@@ -8,6 +8,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -28,7 +29,7 @@ public class WebSecurityConfig {
     private UserDetailsServiceImpl userDetailsService;
     @Autowired
     private AuthenticationEntryPoint unauthorizedHandler;
-    private final static String[] EVERYONE = { "/api/auth/**", "/category", "/quiz", "/public","/public/items" };
+    private final static String[] EVERYONE = {"/api/auth/**","/public"};
     private final static String[] SECURE = { "/private","/question/**","/reply/**","/user/**"};
     private final static String[] ROLES = { "MODERATOR", "ADMIN" };
 
@@ -60,8 +61,7 @@ public class WebSecurityConfig {
         http.csrf(csrf -> csrf.disable()).cors(Customizer.withDefaults())
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth.requestMatchers(EVERYONE).permitAll()
-                        .anyRequest().authenticated());
+                .authorizeHttpRequests(auth -> auth.requestMatchers(EVERYONE).permitAll().anyRequest().authenticated());
         http.authenticationProvider(authenticationProvider());
         http.addFilterBefore(authenticationJwtTokenFilter(),
                 UsernamePasswordAuthenticationFilter.class);
