@@ -103,8 +103,10 @@ public class ReplyController {
         }
     }
     
-    // Mark as correct
+    // Mark as correct / Close question
     
+    // Change isSolution to true
+    // Change question.isSolved to true
 
     // (Like and dislike)
 }

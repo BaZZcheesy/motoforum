@@ -27,6 +27,8 @@ public class Question {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "question")
     public List<Reply> replies;
 
+    private boolean isSolved;
+
     public Question() {
         
     }
@@ -64,5 +66,11 @@ public class Question {
         this.questioner = questioner;
     }
 
-    
+    public boolean isSolved() {
+        return isSolved;
+    }
+
+    public void setSolved(boolean isSolved) {
+        this.isSolved = isSolved;
+    }
 }

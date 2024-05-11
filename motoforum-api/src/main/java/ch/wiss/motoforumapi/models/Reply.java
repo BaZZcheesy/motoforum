@@ -25,6 +25,8 @@ public class Reply {
     @JoinColumn(name = "question_id")
     private Question question;
 
+    private boolean isSolution;
+
     public Reply() {
 
     }
@@ -61,5 +63,13 @@ public class Reply {
 
     public void setQuestion(Question question) {
         this.question = question;
+    }
+
+    public boolean isSolution() {
+        return isSolution;
+    }
+
+    public void setSolution(boolean isSolution) {
+        this.isSolution = isSolution;
     }
 }
