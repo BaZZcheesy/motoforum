@@ -26,6 +26,10 @@ public class User {
 
     private String password;
 
+    @ManyToMany(fetch = FetchType.LAZY) // das ist der spannende ORM Teil: automatisches Mapping von M-N Beziehungen :-)
+    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles = new HashSet<>();
+
     public User() {
     }
 
@@ -41,11 +45,6 @@ public class User {
         this.email = email;
         this.password = password;
     }
-
-    @ManyToMany(fetch = FetchType.LAZY) // das ist der spannende ORM Teil: automatisches Mapping von M-N Beziehungen :-)
-    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles = new HashSet<>();
-    /* all setters and getters */
 
     public void setId(Integer id) {
         this.id = id;
@@ -85,5 +84,23 @@ public class User {
 
     public Set<Role> getRoles() {
         return roles;
+    }
+
+    public boolean isAdmin() {
+        for (Role role : roles) {
+            if (role.getRole().equals(ERole.ROLE_ADMIN)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isModerator() {
+        for (Role role : roles) {
+            if (role.getRole().equals(ERole.ROLE_MODERATION)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

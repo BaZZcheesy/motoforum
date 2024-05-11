@@ -1,7 +1,11 @@
 package ch.wiss.motoforumapi.controller;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import ch.wiss.motoforumapi.models.User;
 import ch.wiss.motoforumapi.models.Question;
 import ch.wiss.motoforumapi.models.Reply;
 import ch.wiss.motoforumapi.repository.QuestionRepository;
@@ -61,26 +66,40 @@ public class ReplyController {
                     .body(new MessageResponse("Error adding reply: " + ex.getMessage()));
         }
     }
-        
-    
+
+    @DeleteMapping("/{replyId}")
+    public ResponseEntity<?> deleteReply(HttpServletRequest request, @PathVariable Long replyId) {
+        try {
+            String token = request.getHeader("Authorization").replace("Bearer ", "");
+            String username = ju.getUserNameFromJwtToken(token);
+            Optional<User> user = ur.findByUsername(username);
+            if (user.isEmpty()) {
+                return ResponseEntity
+                        .internalServerError()
+                        .body(new MessageResponse("User not found"));
+            }
+
+            Optional<Reply> reply = rr.findById(replyId);
+            if (reply.isEmpty()) {
+                return ResponseEntity
+                        .internalServerError()
+                        .body(new MessageResponse("Reply not found"));
+            }
+
+            if (!reply.get().getReplier().equals(user.get()) || !user.get().isAdmin() || !user.get().isModerator() ) {
+                return ResponseEntity
+                        .badRequest()
+                        .body(new MessageResponse("You are not authorized to delete this reply"));
+            }
+
+            rr.delete(reply.get());
+            return ResponseEntity
+                    .ok()
+                    .body(new MessageResponse("Reply deleted successfully"));
+        } catch (Exception ex) {
+            return ResponseEntity
+                    .internalServerError()
+                    .body(new MessageResponse("Error deleting reply: " + ex.getMessage()));
+        }
+    }    
 }
-
-//@PostMapping("/reply")
-//public ResponseEntity<?> replyToPost(Get question, maybe another function in questioncontroller) {
-//    Get user from jwt_token
-//    Reply reply = new Reply( question.id , reply , user)
-//    save(reply)
-//}
-
-//deletereply() {
-//    Get user and reply from token/request
-//    If ( request.user == replyToDelete.user || request.user.role == admin) {
-//    try {
-//    delete()
-//    return responsebody.ok
-//    }
-//    catch (ex) {
-//    Syso(ex)
-//    Return responsebody.badRequest
-//    }
-//    }

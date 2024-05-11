@@ -10,15 +10,13 @@ const Questions = () => {
         setQuestion(event.target.value)
     }
 
-
-
     return (
         <>
             <div>
                 <form onSubmit={(e) => {
                     e.preventDefault();
                     if (question !== null) {
-                        api.handleSubmit(question).then(api.loadData().then(data => {setQuestions(data)}));
+                        api.handleSubmit(question).then(api.loadData()).then(data => {setQuestions(data)});
                     }
                 }}>
                     <label>Ask your question</label>
