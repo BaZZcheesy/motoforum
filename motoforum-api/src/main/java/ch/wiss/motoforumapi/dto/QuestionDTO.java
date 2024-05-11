@@ -5,7 +5,7 @@ import java.util.List;
 import ch.wiss.motoforumapi.models.User;
 
 public class QuestionDTO {
-    private Integer id;
+    private Long id;
     private String question;
     private User questioner;
     private List<ReplyDTO> replies;
@@ -14,17 +14,17 @@ public class QuestionDTO {
 
     }
     
-    public QuestionDTO(Integer id, String question, List<ReplyDTO> replies) {
+    public QuestionDTO(Long id, String question, List<ReplyDTO> replies) {
         this.id = id;
         this.question = question;
         this.replies = replies;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }   
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 

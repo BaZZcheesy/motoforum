@@ -37,8 +37,8 @@ public class SignupRequest {
         this.email = email;
     }
 
-    public void setRole(Set<String> role) {
-        this.role = role;
+    public void setRole(Set<String> roles) {
+        this.role = roles;
     }
 
     public void setPassword(String password) {

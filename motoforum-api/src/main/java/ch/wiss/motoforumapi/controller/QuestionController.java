@@ -2,11 +2,14 @@ package ch.wiss.motoforumapi.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +21,7 @@ import ch.wiss.motoforumapi.dto.QuestionDTO;
 import ch.wiss.motoforumapi.dto.ReplyDTO;
 import ch.wiss.motoforumapi.models.Question;
 import ch.wiss.motoforumapi.models.Reply;
+import ch.wiss.motoforumapi.models.User;
 import ch.wiss.motoforumapi.repository.QuestionRepository;
 import ch.wiss.motoforumapi.repository.ReplyRepository;
 import ch.wiss.motoforumapi.repository.UserRepository;
@@ -37,7 +41,7 @@ public class QuestionController {
     @Autowired
     public ReplyRepository rr;
     @Autowired
-    private JwtUtils jwtUtils;
+    private JwtUtils ju;
 
     ObjectMapper om = new ObjectMapper();
 
@@ -47,9 +51,9 @@ public class QuestionController {
             System.out.println(question);
             QuestionRequest questionRequest = om.readValue(question, QuestionRequest.class);
             String token = request.getHeader("Authorization").replace("Bearer ", "");
-            String username = jwtUtils.getUserNameFromJwtToken(token);
+            String username = ju.getUserNameFromJwtToken(token);
             var user = ur.findByUsername(username);
-            if (user == null) {
+            if (!user.isPresent()) {
                 return ResponseEntity
                         .internalServerError()
                         .body(new MessageResponse("We could not get your username"));
@@ -59,8 +63,7 @@ public class QuestionController {
             return ResponseEntity
                     .ok()
                     .body(new MessageResponse("Question is online! Get ready for answers"));
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             System.out.println(ex.toString());
             return ResponseEntity
                     .internalServerError()
@@ -68,7 +71,7 @@ public class QuestionController {
         }
     }
 
-    @GetMapping("getall")
+    @GetMapping("/getall")
     public List<QuestionDTO> getAllQuestionsWithReplies() {
         List<Question> questions = qr.findAll(); // Fetch all questions
         List<QuestionDTO> questionDTOs = new ArrayList<>();
@@ -92,11 +95,65 @@ public class QuestionController {
         return questionDTOs;
     }
 
+    @GetMapping("/getone/{questionId}")
+    public QuestionDTO getOneQuestionWithReplies(@PathVariable int questionId) {
+        List<Question> questions = qr.findAll(); // Fetch all questions
+
+        // Choose one question from the list (You can implement any logic here to choose
+        // the question)
+        Question question = questions.get(questionId-1); // For simplicity, let's just choose the first question
+
+        QuestionDTO questionDTO = new QuestionDTO();
+        questionDTO.setId(question.getId());
+        questionDTO.setQuestion(question.getQuestion());
+        questionDTO.setQuestioner(question.getQuestioner());
+        List<ReplyDTO> replyDTOs = new ArrayList<>();
+        for (Reply reply : question.getReplies()) {
+            ReplyDTO replyDTO = new ReplyDTO();
+            replyDTO.setId(reply.getId());
+            replyDTO.setReplyText(reply.getReply());
+            // Set other reply fields if needed
+            replyDTOs.add(replyDTO);
+        }
+        questionDTO.setReplies(replyDTOs);
+
+        return questionDTO;
+    }
+
     // Delete Question
+    @DeleteMapping("/delete/{questionId}")
+    public ResponseEntity<?> deleteQuestion(HttpServletRequest request, @PathVariable Long questionToDeleteId) {
+        try {
+            String token = request.getHeader("Authorization").replace("Bearer ", "");
+            String username = ju.getUserNameFromJwtToken(token);
+            Optional<User> user = ur.findByUsername(username);
+            if (user.isEmpty()) {
+                return ResponseEntity
+                        .badRequest()
+                        .body(new MessageResponse("User not found"));
+            }
 
+            Optional<Question> questionToDelete = qr.findById(questionToDeleteId);
+            if (questionToDelete.isEmpty()) {
+                return ResponseEntity
+                        .badRequest()
+                        .body(new MessageResponse("Reply not found"));
+            }
 
-    // Get one question
+            if (!questionToDelete.get().getQuestioner().equals(user.get()) || !user.get().isAdmin() || !user.get().isModerator()) {
+                return ResponseEntity
+                        .badRequest()
+                        .body(new MessageResponse("You are not authorized to delete this reply"));
+            }
 
-
-    // Close question
+            qr.delete(questionToDelete.get());
+            return ResponseEntity
+                    .ok()
+                    .body(new MessageResponse("Reply deleted successfully"));
+        } catch (Exception ex) {
+            return ResponseEntity
+                    .internalServerError()
+                    .body(new MessageResponse("Error deleting reply: " + ex.getMessage()));
+        }
+    }
 }

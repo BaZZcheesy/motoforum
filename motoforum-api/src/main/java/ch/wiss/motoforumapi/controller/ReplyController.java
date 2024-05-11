@@ -36,6 +36,8 @@ public class ReplyController {
     @Autowired
     public JwtUtils ju;
 
+    // Insert new question
+
     @PostMapping("/insert")
     public ResponseEntity<?> insertReply(HttpServletRequest request, @RequestBody String replyData) {
         try {
@@ -55,6 +57,11 @@ public class ReplyController {
                         .internalServerError()
                         .body(new MessageResponse("Question not found"));
             }
+            if (question.isSolved()) {
+                return ResponseEntity
+                        .badRequest()
+                        .body(new MessageResponse("This question is already answered"));
+            }
             Reply replyToBeInserted = new Reply(replyRequest.getReply(), user.get(), question);
             rr.save(replyToBeInserted);
             return ResponseEntity
@@ -67,7 +74,9 @@ public class ReplyController {
         }
     }
 
-    @DeleteMapping("/{replyId}")
+    // Delete a reply
+
+    @DeleteMapping("/delete/{replyId}")
     public ResponseEntity<?> deleteReply(HttpServletRequest request, @PathVariable Long replyId) {
         try {
             String token = request.getHeader("Authorization").replace("Bearer ", "");
@@ -86,7 +95,7 @@ public class ReplyController {
                         .body(new MessageResponse("Reply not found"));
             }
 
-            if (!reply.get().getReplier().equals(user.get()) || !user.get().isAdmin() || !user.get().isModerator() ) {
+            if (!reply.get().getReplier().equals(user.get()) || !user.get().isAdmin() || !user.get().isModerator()) {
                 return ResponseEntity
                         .badRequest()
                         .body(new MessageResponse("You are not authorized to delete this reply"));
@@ -102,11 +111,55 @@ public class ReplyController {
                     .body(new MessageResponse("Error deleting reply: " + ex.getMessage()));
         }
     }
-    
-    // Mark as correct / Close question
-    
-    // Change isSolution to true
-    // Change question.isSolved to true
 
-    // (Like and dislike)
+    // Mark as correct / close question
+
+    @PostMapping("/accept/{replyId}")
+    public ResponseEntity<?> acceptReply(HttpServletRequest request, @PathVariable Long idOfAcceptedReply) {
+        try {
+            String token = request.getHeader("Authorization").replace("Bearer ", "");
+            String username = ju.getUserNameFromJwtToken(token);
+            var actor = ur.findByUsername(username);
+            if (actor == null) {
+                return ResponseEntity
+                        .internalServerError()
+                        .body(new MessageResponse("User not found"));
+            }
+            var replyToAccept = rr.findById(idOfAcceptedReply);
+            if (!replyToAccept.isPresent()) {
+                return ResponseEntity
+                        .badRequest()
+                        .body(new MessageResponse("The reply to mark as correct is not present"));
+            }
+            var question = qr.findById(replyToAccept.get().getQuestion().getId());
+            if (!question.isPresent()) {
+                return ResponseEntity
+                        .internalServerError()
+                        .body(new MessageResponse("We could not get the target question"));
+            }
+
+            if (question.get().getQuestioner().getUsername().equals(actor.get().getUsername())) {
+                return ResponseEntity
+                        .badRequest()
+                        .body(new MessageResponse("You dont have the rights to mark this reply as a solution"));
+            }
+            // Mark the reply as correct/solution
+            Reply acceptedReply = replyToAccept.get();
+            acceptedReply.setSolution(true);
+            rr.save(acceptedReply);
+
+            // Mark the question as solved
+            Question solvedQuestion = question.get();
+            solvedQuestion.setSolved(true);
+            qr.save(solvedQuestion);
+
+            return ResponseEntity
+                    .ok()
+                    .body("The question got solved");
+        } catch (Exception ex) {
+            return ResponseEntity
+                    .internalServerError()
+                    .body(new MessageResponse("An exception orrurec while processing your request: " + ex));
+        }
+    }
 }

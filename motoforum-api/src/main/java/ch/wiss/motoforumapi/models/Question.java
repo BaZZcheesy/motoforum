@@ -16,7 +16,7 @@ import jakarta.persistence.OneToMany;
 public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Integer id;
+    public Long id;
 
     public String question;
 
@@ -38,7 +38,7 @@ public class Question {
         this.questioner = user;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
