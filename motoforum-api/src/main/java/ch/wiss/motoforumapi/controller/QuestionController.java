@@ -68,11 +68,6 @@ public class QuestionController {
         }
     }
 
-    @PostMapping("/get")
-    public List<Question> getQuestions() {
-        return qr.findAll();
-    }
-
     @GetMapping("getall")
     public List<QuestionDTO> getAllQuestionsWithReplies() {
         List<Question> questions = qr.findAll(); // Fetch all questions
@@ -96,4 +91,12 @@ public class QuestionController {
         }
         return questionDTOs;
     }
+
+    // Delete Question
+
+
+    // Get one question
+
+
+    // Close question
 }

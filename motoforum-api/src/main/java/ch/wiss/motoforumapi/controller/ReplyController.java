@@ -101,5 +101,10 @@ public class ReplyController {
                     .internalServerError()
                     .body(new MessageResponse("Error deleting reply: " + ex.getMessage()));
         }
-    }    
+    }
+    
+    // Mark as correct
+    
+
+    // (Like and dislike)
 }

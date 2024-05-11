@@ -29,7 +29,7 @@ public class WebSecurityConfig {
     @Autowired
     private AuthenticationEntryPoint unauthorizedHandler;
     private final static String[] EVERYONE = { "/api/auth/**", "/category", "/quiz", "/public","/public/items" };
-    private final static String[] SECURE = { "/private","/question/**","/reply/**"};
+    private final static String[] SECURE = { "/private","/question/**","/reply/**","/user/**"};
     private final static String[] ROLES = { "MODERATOR", "ADMIN" };
 
     @Bean

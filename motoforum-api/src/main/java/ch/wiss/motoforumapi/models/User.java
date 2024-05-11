@@ -26,6 +26,8 @@ public class User {
 
     private String password;
 
+    private String motorcycle;
+
     @ManyToMany(fetch = FetchType.LAZY) // das ist der spannende ORM Teil: automatisches Mapping von M-N Beziehungen :-)
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
@@ -84,6 +86,14 @@ public class User {
 
     public Set<Role> getRoles() {
         return roles;
+    }
+
+    public String getMotorcycle() {
+        return motorcycle;
+    }
+
+    public void setMotorcycle(String motorcycle) {
+        this.motorcycle = motorcycle;
     }
 
     public boolean isAdmin() {
