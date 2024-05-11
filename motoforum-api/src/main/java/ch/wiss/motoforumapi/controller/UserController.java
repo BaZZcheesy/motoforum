@@ -64,21 +64,22 @@ public class UserController {
         try {
             ObjectMapper om = new ObjectMapper();
             EditRequest editRequest = om.readValue(requestBody, EditRequest.class);
-            String username = ju.getUserNameFromJwtToken(editRequest.getToken());
-            var userToUpdate = ur.findById(id);
-            if (!userToUpdate.isPresent()) {
+            String actorUsername = ju.getUserNameFromJwtToken(editRequest.getToken());
+            var findUserToUpdate = ur.findById(id);
+            if (!findUserToUpdate.isPresent()) {
                 return ResponseEntity
                         .badRequest()
                         .body(new MessageResponse("We could not find the user you are trying to update"));
             }
-            Optional<User> user = ur.findByUsername(username);
-            if (!user.isPresent()) {
+            var userToUpdate = findUserToUpdate.get();
+            Optional<User> actor = ur.findByUsername(actorUsername);
+            if (!actor.isPresent()) {
                 return ResponseEntity
                         .badRequest()
                         .body(new MessageResponse("We cant authenticate the user"));
             }
-            if (!user.get().isAdmin() || !user.get().isModerator()) {
-                if (!userToUpdate.get().getPassword().equals(encoder.encode(editRequest.getPassword())) || !userToUpdate.get().getUsername().equals(username)) {
+            if (!actor.get().isAdmin() || !actor.get().isModerator()) {
+                if (!userToUpdate.getPassword().equals(encoder.encode(editRequest.getPassword())) || !userToUpdate.getUsername().equals(actorUsername)) {
                     return ResponseEntity
                             .badRequest()
                             .body(new MessageResponse("You are not authorized to edit this user"));
@@ -87,19 +88,23 @@ public class UserController {
 
             switch (valueToUpdate) {
                 case "username":
-                    userToUpdate.get().setUsername(editRequest.getProperty());
+                    userToUpdate.setUsername(editRequest.getProperty());
+                    ur.save(userToUpdate);
                     break;
                 
                 case "motorcycle":
-                    userToUpdate.get().setMotorcycle(editRequest.getProperty());
+                    userToUpdate.setMotorcycle(editRequest.getProperty());
+                    ur.save(userToUpdate);
                     break;
 
                 case "email":
-                    userToUpdate.get().setEmail(editRequest.getProperty());
+                    userToUpdate.setEmail(editRequest.getProperty());
+                    ur.save(userToUpdate);
                     break;
 
                 case "password":
-                    userToUpdate.get().setPassword(encoder.encode(editRequest.getPassword()));
+                    userToUpdate.setPassword(encoder.encode(editRequest.getPassword()));
+                    ur.save(userToUpdate);
                     break;
 
                 default:
