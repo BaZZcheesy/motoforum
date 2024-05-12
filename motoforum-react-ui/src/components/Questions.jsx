@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Question from './Question'
-import api from '../api/api'
+import api, { loadData } from '../api/api'
+import NavMenu from "./MainNav";
 
 const Questions = () => {
     const [question, setQuestion] = useState("");
@@ -10,13 +11,20 @@ const Questions = () => {
         setQuestion(event.target.value)
     }
 
+    useEffect(() => {
+        api.loadData().then(data => { setQuestions(data) } )
+    }, [])
+
     return (
         <>
+            <NavMenu />
             <div>
-                <form onSubmit={(e) => {
+                <form onSubmit={async (e) => {
                     e.preventDefault();
                     if (question !== null) {
-                        api.handleSubmit(question).then(api.loadData()).then(data => {setQuestions(data)});
+                        await api.submitQuestion(question);
+                        const data = await api.loadData();
+                        setQuestions(data);
                     }
                 }}>
                     <label>Ask your question</label>
@@ -27,12 +35,15 @@ const Questions = () => {
             <div>
                 <button onClick={(e) => {
                     e.preventDefault();
-                    api.loadData().then(data => {setQuestions(data)})
-                    }}></button>
+                    api.loadData().then(data => { setQuestions(data) } )
+                }}>
+                    Load Questions
+                </button>
+                
                 <h1>Questions</h1>
                 <ul>
                     {questions.map(question => (
-                        <Question question={question} />
+                        <Question question={question} key={question.id} setQuestions={setQuestions} />
                     ))}
                 </ul>
             </div>

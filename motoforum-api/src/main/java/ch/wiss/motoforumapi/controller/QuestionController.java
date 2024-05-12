@@ -81,11 +81,13 @@ public class QuestionController {
             questionDTO.setId(question.getId());
             questionDTO.setQuestion(question.getQuestion());
             questionDTO.setQuestioner(question.getQuestioner());
+            questionDTO.setSolved(question.isSolved());
             List<ReplyDTO> replyDTOs = new ArrayList<>();
             for (Reply reply : question.getReplies()) {
                 ReplyDTO replyDTO = new ReplyDTO();
                 replyDTO.setId(reply.getId());
                 replyDTO.setReplyText(reply.getReply());
+                replyDTO.setSolution(reply.isSolution());
                 // Set other reply fields if needed
                 replyDTOs.add(replyDTO);
             }
@@ -107,11 +109,13 @@ public class QuestionController {
         questionDTO.setId(question.getId());
         questionDTO.setQuestion(question.getQuestion());
         questionDTO.setQuestioner(question.getQuestioner());
+        questionDTO.setSolved(question.isSolved());
         List<ReplyDTO> replyDTOs = new ArrayList<>();
         for (Reply reply : question.getReplies()) {
             ReplyDTO replyDTO = new ReplyDTO();
             replyDTO.setId(reply.getId());
             replyDTO.setReplyText(reply.getReply());
+            replyDTO.setSolution(reply.isSolution());
             // Set other reply fields if needed
             replyDTOs.add(replyDTO);
         }
@@ -121,7 +125,7 @@ public class QuestionController {
     }
 
     // Delete Question
-    @DeleteMapping("/delete/{questionId}")
+    @DeleteMapping("/delete/{questionToDeleteId}")
     public ResponseEntity<?> deleteQuestion(HttpServletRequest request, @PathVariable Long questionToDeleteId) {
         try {
             String token = request.getHeader("Authorization").replace("Bearer ", "");

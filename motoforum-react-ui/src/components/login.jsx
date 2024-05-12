@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import {Link} from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
+import NavMenu from './MainNav';
 
 
 const baseUrl = "http://localhost:8080/"
@@ -29,9 +30,7 @@ const Login = () => {
             });
             if (response.data.accessToken) {
                 localStorage.setItem("jwt_token", response.data.accessToken);
-                localStorage.setItem('user', JSON.stringify(response.data.user));
-                // setUser(response.data.user);
-                navigate('/');
+                navigate('/questions');
             }
         } catch (error) {
             console.error("Login failed:", error);
@@ -40,6 +39,7 @@ const Login = () => {
 
     return (
         <>
+            <NavMenu />
             <div>
                 <h1>Login</h1>
                 <form onSubmit={handleSubmit}>

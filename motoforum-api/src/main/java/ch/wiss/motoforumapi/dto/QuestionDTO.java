@@ -9,6 +9,7 @@ public class QuestionDTO {
     private String question;
     private User questioner;
     private List<ReplyDTO> replies;
+    private boolean isSolved;
 
     public QuestionDTO() {
 
@@ -50,5 +51,14 @@ public class QuestionDTO {
 
     public void setQuestioner(User questioner) {
         this.questioner = questioner;
-    } 
+    }
+
+    public boolean isSolved() {
+        return isSolved;
+    }
+
+    public void setSolved(boolean isSolved) {
+        this.isSolved = isSolved;
+    }
+    
 }

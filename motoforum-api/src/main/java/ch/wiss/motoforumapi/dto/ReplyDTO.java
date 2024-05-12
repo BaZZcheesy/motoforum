@@ -3,6 +3,7 @@ package ch.wiss.motoforumapi.dto;
 public class ReplyDTO {
     private Integer id;
     private String replyText;
+    private boolean isSolution;
 
     public ReplyDTO() {
         
@@ -28,4 +29,13 @@ public class ReplyDTO {
     public void setReplyText(String replyText) {
         this.replyText = replyText;
     }
+
+    public boolean isSolution() {
+        return isSolution;
+    }
+
+    public void setSolution(boolean isSolution) {
+        this.isSolution = isSolution;
+    }
+    
 }

@@ -24,7 +24,7 @@ public class Question {
     private User questioner;
 
     @JsonIgnore
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "question")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "question", orphanRemoval = true)
     public List<Reply> replies;
 
     private boolean isSolved;

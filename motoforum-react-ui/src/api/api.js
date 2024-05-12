@@ -1,5 +1,5 @@
 import axios from "axios";
-import Questions from "../components/Questions";
+import UserDTO from '../dto/UserDto';
 
 // Create an instance of Axios with base URL
 const instance = axios.create({
@@ -24,7 +24,7 @@ instance.interceptors.request.use(
 );
 
 // Function to handle answering a question
-export const handleAnswer = async (questionId, reply) => {
+export const submitAnswer = async (questionId, reply) => {
   try {
     await instance.post("reply/insert", { reply, questionId });
     await loadData(); // Reload questions after submitting an answer
@@ -46,17 +46,82 @@ export const loadData = async () => {
 };
 
 // Function to handle submitting a new question
-export const handleSubmit = async (question) => {
+export const submitQuestion = async (question) => {
   try {
-    await instance.post("question/ask", { question });
-    await loadData(); // Reload questions after submitting a new one
+    await instance.post("question/ask", { question })
   } catch (ex) {
     console.log(ex);
   }
 };
 
+// Function to get a single user account with its id
+export const getUserAccount = async (userId) => {
+  try {
+    const response = await instance.get(`user/byId/${userId}`)
+    return response.data
+  } catch (ex) {
+    console.log(ex)
+  }
+}
+
+// Function to update a specified value
+export const updateUserValue = async (userId, valueToUpdate, property, pw) => {
+  try {
+    const response = await instance.put(`user/${userId}/${valueToUpdate}`, {property, pw})
+    return response.data;
+  } catch (ex) {
+    console.log(ex)
+  }
+}
+
+// Get your user
+export const getUser = async () => {
+  try {
+    const response = await instance.get("user/me")
+    return response.data
+  } catch (ex) {
+    console.log(ex)
+  }
+}
+
+// Delete a question
+export const deleteQuestion = async (questionId) => {
+  try {
+    await instance.delete(`question/delete/${questionId}`)
+    await loadData
+  } catch (ex) {
+    console.log(ex)
+  }
+}
+
+// Set reply as solution
+export const setAsSolution = async (replyId) => {
+  try {
+    await instance.get(`reply/accept/${replyId}`)
+  } catch (ex) {
+    console.log(ex)
+  }
+}
+
+// Delete user
+export const deleteUser = async (userId) => {
+
+}
+
+// Delete reply
+export const deleteReply = async (replyId) => {
+
+}
+
 export default {
-  handleAnswer,
-  handleSubmit,
+  submitAnswer,
+  submitQuestion,
   loadData,
+  getUserAccount,
+  getUser,
+  deleteQuestion,
+  updateUserValue,
+  setAsSolution,
+  deleteUser,
+  deleteReply
 };

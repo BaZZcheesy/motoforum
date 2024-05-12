@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,7 +37,7 @@ public class ReplyController {
     @Autowired
     public JwtUtils ju;
 
-    // Insert new question
+    // Insert new reply
 
     @PostMapping("/insert")
     public ResponseEntity<?> insertReply(HttpServletRequest request, @RequestBody String replyData) {
@@ -116,7 +117,7 @@ public class ReplyController {
 
     // Mark as correct / close question
 
-    @PostMapping("/accept/{replyId}")
+    @GetMapping("/accept/{replyId}")
     public ResponseEntity<?> acceptReply(HttpServletRequest request, @PathVariable Long idOfAcceptedReply) {
         try {
             String token = request.getHeader("Authorization").replace("Bearer ", "");
