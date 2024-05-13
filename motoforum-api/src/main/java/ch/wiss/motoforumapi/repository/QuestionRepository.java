@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 
 import ch.wiss.motoforumapi.models.Question;
 
+// Repository um für die Questions
 @Repository
 public interface QuestionRepository extends JpaRepository<Question, Long> {
     

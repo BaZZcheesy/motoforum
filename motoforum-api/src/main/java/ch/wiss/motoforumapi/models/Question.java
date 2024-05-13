@@ -1,40 +1,44 @@
 package ch.wiss.motoforumapi.models;
 
-import java.util.Set;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.validation.constraints.NotBlank;
 
 @Entity
 public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Integer id;
+    public Long id;
 
-    @NotBlank
     public String question;
 
-    @NotBlank
-    @OneToOne
-    @JoinColumn( name = "user_id")
+    @ManyToOne
     private User questioner;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "question")
-    public Set<Reply> replies;
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "question", orphanRemoval = true)
+    public List<Reply> replies;
 
-
+    private boolean isSolved;
 
     public Question() {
-
+        
     }
-    public Integer getId() {
+
+    public Question(String question, User user) {
+        this.question = question;
+        this.questioner = user;
+    }
+
+    public Long getId() {
         return id;
     }
 
@@ -46,11 +50,27 @@ public class Question {
         this.question = question;
     }
 
-    //public User getQuestioner() {
-    //    return questioner;
-    //}
+    public List<Reply> getReplies() {
+        return replies;
+    }
 
-    //public void setQuestioner(User questioner) {
-    //    this.questioner = questioner;
-    //}
+    public void setReplies(List<Reply> replies) {
+        this.replies = replies;
+    }
+
+    public User getQuestioner() {
+        return questioner;
+    }
+
+    public void setQuestioner(User questioner) {
+        this.questioner = questioner;
+    }
+
+    public boolean isSolved() {
+        return isSolved;
+    }
+
+    public void setSolved(boolean isSolved) {
+        this.isSolved = isSolved;
+    }
 }

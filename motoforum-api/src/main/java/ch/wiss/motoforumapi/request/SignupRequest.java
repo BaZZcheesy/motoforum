@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
+// Objekt um ein Signuprequest Body abzufüllen
 public class SignupRequest {
     @NotBlank
     @Size(min = 3, max = 20)
@@ -37,8 +38,8 @@ public class SignupRequest {
         this.email = email;
     }
 
-    public void setRole(Set<String> role) {
-        this.role = role;
+    public void setRole(Set<String> roles) {
+        this.role = roles;
     }
 
     public void setPassword(String password) {

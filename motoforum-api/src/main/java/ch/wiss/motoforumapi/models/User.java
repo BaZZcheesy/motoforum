@@ -11,27 +11,31 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.persistence.GeneratedValue;
 
 @Entity
-@Table(name = "User")
+@Table(name = "user")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
-    @NotBlank
     private String username;
-    @NotBlank
+
     private String email;
-    @NotBlank
+
     private String password;
+
+    private String motorcycle;
+
+    @ManyToMany(fetch = FetchType.LAZY) // das ist der spannende ORM Teil: automatisches Mapping von M-N Beziehungen :-)
+    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles = new HashSet<>();
 
     public User() {
     }
 
-    public User(Integer id, String name, String email, String password) {
+    public User(Long id, String name, String email, String password) {
         this.id = id;
         this.username = name;
         this.email = email;
@@ -44,12 +48,7 @@ public class User {
         this.password = password;
     }
 
-    @ManyToMany(fetch = FetchType.LAZY) // das ist der spannende ORM Teil: automatisches Mapping von M-N Beziehungen :-)
-    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles = new HashSet<>();
-    /* all setters and getters */
-
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -69,7 +68,7 @@ public class User {
         this.roles = roles;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
@@ -87,5 +86,31 @@ public class User {
 
     public Set<Role> getRoles() {
         return roles;
+    }
+
+    public String getMotorcycle() {
+        return motorcycle;
+    }
+
+    public void setMotorcycle(String motorcycle) {
+        this.motorcycle = motorcycle;
+    }
+
+    public boolean isAdmin() {
+        for (Role role : roles) {
+            if (role.getRole().equals(ERole.ROLE_ADMIN)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isModerator() {
+        for (Role role : roles) {
+            if (role.getRole().equals(ERole.ROLE_MODERATION)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -28,8 +28,10 @@ import ch.wiss.motoforumapi.security.JwtResponse;
 import ch.wiss.motoforumapi.security.JwtUtils;
 import ch.wiss.motoforumapi.security.UserDetailsImpl;
 import ch.wiss.motoforumapi.security.MessageResponse;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 
+// Controller für das Login und Registrieren eines Benutzers
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
@@ -45,12 +47,14 @@ public class AuthController {
     @Autowired
     JwtUtils jwtUtils;
 
+    // Endpoint für das Einloggen eines bestehenden benutzers
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),
                         loginRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
+        // JWT Token generieren
         String jwt = jwtUtils.generateJwtToken(authentication);
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         List<String> roles = userDetails.getAuthorities().stream()
@@ -63,6 +67,8 @@ public class AuthController {
                 roles));
     }
 
+    // Endpoint für das Registrieren eines neuen Benutzers
+    @Transactional
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {

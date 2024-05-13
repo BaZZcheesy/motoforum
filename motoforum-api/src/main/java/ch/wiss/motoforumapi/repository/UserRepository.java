@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import ch.wiss.motoforumapi.models.User;
 
+// Repository um für die User
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByUsername(String username);

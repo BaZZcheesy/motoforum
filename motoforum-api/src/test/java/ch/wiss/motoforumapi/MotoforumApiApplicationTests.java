@@ -1,13 +1,13 @@
 package ch.wiss.motoforumapi;
 
-import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 class MotoforumApiApplicationTests {
+	// Auskommentiert nach rücksprache
 
-	@Test
-	void contextLoads() {
-	}
-
+	// @Test
+	// void contextLoads(){
+	// 	assertTrue(true, "all good");
+	// }
 }

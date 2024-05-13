@@ -1,6 +1,9 @@
 import React, { useState } from 'react'
 import {Link} from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
+import axios from "axios";
+import UnauthedNavMenu from './UnauthedMainNav';
+
 
 const baseUrl = "http://localhost:8080/"
 
@@ -21,26 +24,14 @@ const Login = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            await fetch(baseUrl + "api/auth/signin", {
-                headers : {
-                    'Content-Type' : 'application/json'
-                },
-                body: JSON.stringify(
-                    username,
-                    password
-                )
-            }).then( response => {
-                if (response.data.accessToken) {
-                    localStorage.setItem("jwt_token", response.data.accessToken);
-                    localStorage.setItem("user", response.data.username);
-                    console.log(response.data)
-                    // setUser(response.data.user);
-                    navigate("/");
-                }
-                else {
-                    console.log("Login failed")
-                }
-            })  
+            const response = await axios.post(baseUrl + "api/auth/signin", {
+                username,
+                password
+            });
+            if (response.data.accessToken) {
+                localStorage.setItem("jwt_token", response.data.accessToken);
+                navigate('/questions');
+            }
         } catch (error) {
             console.error("Login failed:", error);
         }
@@ -48,6 +39,7 @@ const Login = () => {
 
     return (
         <>
+            <UnauthedNavMenu />
             <div>
                 <h1>Login</h1>
                 <form onSubmit={handleSubmit}>

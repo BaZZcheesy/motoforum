@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import {Link} from "react-router-dom";
+import UnauthedNavMenu from "./UnauthedMainNav";
+import { useNavigate } from 'react-router-dom';
 
 
 const baseUrl = "http://localhost:8080/"
@@ -10,6 +12,7 @@ const Register = () => {
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const navigate = useNavigate();
 
     const handleUsernameChange = event => {
         setUsername(event.target.value);
@@ -38,7 +41,8 @@ const Register = () => {
                 if (!response.status === 200) {
                     alert("Something went wrong")
                 }
-                alert("User created succsessfully");
+                alert("User created successfully");
+                navigate("/login")
             })
         }
         catch (ex) {
@@ -48,8 +52,9 @@ const Register = () => {
 
     return (
         <>
+            <UnauthedNavMenu />
             <div>
-                <h1>Register</h1>
+                <h1 className="headline">Register</h1>
                 <form onSubmit={handleSubmit}>
                     <label>Username</label>
                     <input type="text"
