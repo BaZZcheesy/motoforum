@@ -39,3 +39,15 @@ This Repo includes all source code for a simple web forum which im currently wor
 8. Ich als Admin möchte Benutzer welche mehrheitlich schlecht auffallen, von dem Forum bannen.
     - Administratoren sollten in der Lage sein, Benutzerkonten zu sperren oder zu löschen, die gegen die Community-Richtlinien verstoßen.
     - Die Entscheidung über das Verbannen eines Benutzers sollte nach klaren Kriterien und unter Berücksichtigung der Community-Richtlinien getroffen werden.
+
+#### Transactions / Transaktionen
+
+Ich werde in meinem Projekt transaktionen benutzen. Diese werden in folgenden Controllern benutzt:
+
+- AuthController beim PostMapping("/signup")
+- UserController beim PutMapping("/{userId}/{valueToUpdate}")
+- UserController beim DeleteMapping("/delete/{userToDeleteId}")
+- ReplyController beim PostMapping("/insert")
+- ReplyController beim DeleteMapping("/delete/{replyId}")
+- QuestionController beim PostMapping("/ask")
+- QuestionController beim DeleteMapping("/delete/{questionToDeleteId}")

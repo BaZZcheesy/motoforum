@@ -105,7 +105,7 @@ export const setAsSolution = async (replyId) => {
 
 // Delete user
 export const deleteUser = async (userId) => {
-
+  
 }
 
 // Delete reply
