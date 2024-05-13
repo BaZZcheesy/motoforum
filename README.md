@@ -44,10 +44,10 @@ This Repo includes all source code for a simple web forum which im currently wor
 
 Ich werde in meinem Projekt transaktionen benutzen. Diese werden in folgenden Controllern benutzt:
 
-- AuthController beim PostMapping("/signup")
-- UserController beim PutMapping("/{userId}/{valueToUpdate}")
-- UserController beim DeleteMapping("/delete/{userToDeleteId}")
-- ReplyController beim PostMapping("/insert")
-- ReplyController beim DeleteMapping("/delete/{replyId}")
-- QuestionController beim PostMapping("/ask")
-- QuestionController beim DeleteMapping("/delete/{questionToDeleteId}")
+- AuthController beim **PostMapping("/signup")**
+- UserController beim **PutMapping("/{userId}/{valueToUpdate}")**
+- UserController beim **DeleteMapping("/delete/{userToDeleteId}")**
+- ReplyController beim **PostMapping("/insert")**
+- ReplyController beim **DeleteMapping("/delete/{replyId}")**
+- QuestionController beim **PostMapping("/ask")**
+- QuestionController beim **DeleteMapping("/delete/{questionToDeleteId}")**
