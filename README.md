@@ -1,6 +1,17 @@
 # motoforum
 
-This Repo includes all source code for a simple web forum which im currently working on.
+## Technologie und Kurzbeschreibung
+
+Dieses Repo beinhaltet eine Motoforum Applikation in welcher man sich gegenseitig austauschen kann. Das Backend / die API benutzt Springboot. Im Frontend wird ReactJS verwendet, um unter anderem API-Calls zu machen und diese Daten danach anzuzeigen.
+
+## Installationsschritte
+
+- Clone git repository
+- Repository in preferierten IDE öffnen
+- npm modules installieren (`npm install`)
+- docker compose ausführen
+- Springboot Application starten
+- React Frontend starten mit (`npm start`)
 
 ## Grade relevant content / Notenrelevante Inhalte
 
@@ -51,3 +62,30 @@ Ich werde in meinem Projekt transaktionen benutzen. Diese werden in folgenden Co
 - ReplyController beim **DeleteMapping("/delete/{replyId}")**
 - QuestionController beim **PostMapping("/ask")**
 - QuestionController beim **DeleteMapping("/delete/{questionToDeleteId}")**
+
+#### Sicherheitskonzept
+
+##### Sicherheitskonfiguration
+
+Sämtliche Sicherheitkonfigurationen sind im WebSecurityConfig festgelegt.
+
+##### Autorisierung
+
+Die Autorisierung basiert auf die JWT Tokens. Manche Ressourcen der Anwendung sind geschützt und erfordern einen JWT Token für den Zugriff.
+
+- Ressourcen für jeden Benutzer:
+  - `/api/auth/**`: Endpunkte für die Authentifizierung
+  - `/public`: Öffentliche Ressourcen
+  - `/swagger-ui/**`: Swagger UI für API-Dokumentation
+
+- Geschützte Ressourcen (Nur für eingeloggte user):
+  - `/private`: Private Ressourcen
+  - `/question/**`: Endpunkte zur Frageverwaltung
+  - `/reply/**`: Endpunkte zur Antwortverwaltung
+  - `/user/**`: Benutzerverwaltungs-Endpunkte
+
+Der Token wird bei einer Request im frontend mitgesendet und ist im Local Browser Storage gespeichert.
+
+#### Externe Ressourcen
+
+ChatGPT, Schulkollegen

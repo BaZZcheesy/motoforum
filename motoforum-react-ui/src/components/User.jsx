@@ -1,7 +1,16 @@
 import React from 'react';
 import api from '../api/api';
+import { useNavigate } from 'react-router-dom';
 
 function User({ user , setUsers }) {
+
+    const navigate = useNavigate();
+
+    const logout = () => {
+        localStorage.setItem("jwt_token", "");
+        navigate("/")
+    }
+
     return (
         <li key={user.id}>
             <p>{user.username}</p>
@@ -67,6 +76,19 @@ function User({ user , setUsers }) {
             }}>
                 <button type="submit">Change Username</button>
             </form>}
+            <form onSubmit={(e) => {
+                e.preventDefault();
+                logout()
+            }}>
+                <button type='submit'>Logout</button>
+            </form>
+            <form onSubmit={(e) => {
+                e.preventDefault();
+                api.deleteUser(user.id)
+                navigate("/user/me")
+            }}>
+                <button type='submit'>Delete user account</button>
+            </form>
         </li>
     );
 }

@@ -1,6 +1,8 @@
 import axios from "axios";
 import UserDTO from '../dto/UserDto';
 
+// Default header der Requests definieren um mit diesem API Calls machen
+
 // Create an instance of Axios with base URL
 const instance = axios.create({
     baseURL: "http://localhost:8080/"
@@ -9,7 +11,6 @@ const instance = axios.create({
 // Add a request interceptor
 instance.interceptors.request.use(
     (config) => {
-        // Modify request config here
         const token = localStorage.getItem('jwt_token');
         if (token) {
             config.headers['Authorization'] = `Bearer ${token}`;
@@ -105,13 +106,23 @@ export const setAsSolution = async (replyId) => {
 
 // Delete user
 export const deleteUser = async (userId) => {
-  
+  try {
+    await instance.delete(`user/delete/${userId}`)
+  } catch (ex) {
+    console.log(ex)
+  }
 }
 
 // Delete reply
 export const deleteReply = async (replyId) => {
-
+  try {
+    await instance.delete(`reply/delete/${replyId}`)
+  } catch (ex) {
+    console.log(ex)
+  }
 }
+
+// Export functions to use them in other pages
 
 export default {
   submitAnswer,

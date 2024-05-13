@@ -1,5 +1,6 @@
 package ch.wiss.motoforumapi.request;
 
+// Objekt um ein Editrequest Body abzufüllen
 public class EditRequest {
     private String property;
     private String pw;

@@ -24,6 +24,7 @@ const Questions = () => {
                     if (question !== null) {
                         await api.submitQuestion(question);
                         const data = await api.loadData();
+                        setQuestion("");
                         setQuestions(data);
                     }
                 }}>

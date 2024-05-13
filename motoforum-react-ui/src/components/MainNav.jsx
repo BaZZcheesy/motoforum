@@ -10,7 +10,7 @@ const NavMenu = () => {
             <nav id="main-nav">
                 <ul>
                     <li>
-                        <Link to="/">Home</Link>
+                        <Link to="/home">Home</Link>
                         <Link to="/questions">Questions</Link>
                         <Link to="/login">Login</Link>
                         <Link to="/register">Register</Link>

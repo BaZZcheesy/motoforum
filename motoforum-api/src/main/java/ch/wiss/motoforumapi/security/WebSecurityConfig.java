@@ -1,5 +1,7 @@
 package ch.wiss.motoforumapi.security;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -30,7 +33,7 @@ public class WebSecurityConfig {
     @Autowired
     private AuthenticationEntryPoint unauthorizedHandler;
 
-    private final static String[] EVERYONE = {"/api/auth/**","/public", "/swagger-ui/**"};
+    private final static String[] EVERYONE = {"/api/auth/**","/public", "/swagger-ui/**", "/api-docs/**"};
     private final static String[] SECURE = { "/private","/question/**","/reply/**","/user/**"};
     private final static String[] ROLES = { "MODERATOR", "ADMIN" };
 
@@ -59,7 +62,14 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf.disable()).cors(Customizer.withDefaults())
+        http.cors(cors -> cors.configurationSource(request -> {
+            CorsConfiguration configuration = new CorsConfiguration();
+            configuration.addAllowedOriginPattern("*"); // Adjust as necessary
+            configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+            configuration.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
+            configuration.setAllowCredentials(true);
+            return configuration;
+        })).csrf(csrf -> csrf.disable()).cors(Customizer.withDefaults())
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth.requestMatchers(EVERYONE).permitAll().anyRequest().authenticated());

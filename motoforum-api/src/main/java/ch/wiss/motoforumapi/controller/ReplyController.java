@@ -24,7 +24,9 @@ import ch.wiss.motoforumapi.request.ReplyRequest;
 import ch.wiss.motoforumapi.security.JwtUtils;
 import ch.wiss.motoforumapi.security.MessageResponse;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
 
+// Controller für die Replies
 @RestController
 @RequestMapping("/reply")
 public class ReplyController {
@@ -37,8 +39,8 @@ public class ReplyController {
     @Autowired
     public JwtUtils ju;
 
-    // Insert new reply
-
+    // Neues Reply zu einer Frage einfügen
+    @Transactional
     @PostMapping("/insert")
     public ResponseEntity<?> insertReply(HttpServletRequest request, @RequestBody String replyData) {
         try {
@@ -75,8 +77,8 @@ public class ReplyController {
         }
     }
 
-    // Delete a reply
-
+    // Reply von einer Frage löschen
+    @Transactional
     @DeleteMapping("/delete/{replyId}")
     public ResponseEntity<?> deleteReply(HttpServletRequest request, @PathVariable Long replyId) {
         try {
@@ -115,9 +117,8 @@ public class ReplyController {
         }
     }
 
-    // Mark as correct / close question
-
-    @GetMapping("/accept/{replyId}")
+    // Frage als korrekt markieren. Question.isSolved wird vom frontend gebraucht um die Frage zu schliessen
+    @GetMapping("/accept/{idOfAcceptedReply}")
     public ResponseEntity<?> acceptReply(HttpServletRequest request, @PathVariable Long idOfAcceptedReply) {
         try {
             String token = request.getHeader("Authorization").replace("Bearer ", "");
@@ -141,7 +142,7 @@ public class ReplyController {
                         .body(new MessageResponse("We could not get the target question"));
             }
 
-            if (question.get().getQuestioner().getUsername().equals(actor.get().getUsername())) {
+            if (!question.get().getQuestioner().getUsername().equals(actor.get().getUsername())) {
                 return ResponseEntity
                         .badRequest()
                         .body(new MessageResponse("You dont have the rights to mark this reply as a solution"));

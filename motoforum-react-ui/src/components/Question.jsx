@@ -18,23 +18,35 @@ function Question({ question, setQuestions }) {
                     {question.replies.map((reply) => (
                         <div key={reply.id}>
                             <p>{reply.replyText}</p>
-                            {question.solved == false &&
+                            {question.solved === false &&
                                 <form onSubmit={async (e) => {
                                     e.preventDefault();
-                                    await api.setAsSolution(reply.id)
+                                    console.log(reply.id)
+                                    await api.setAsSolution(reply.id);
+                                    const data = await api.loadData();
+                                    setQuestions(data);
                                 }}>
                                     <button type='submit'>Set as solution</button>
                                 </form>
                             }
-                            {reply.solution == true &&
+                            {reply.solution === true &&
                                 <p>Solution</p>
                             }
+                            <form onSubmit={async (e) => {
+                                e.preventDefault();
+                                console.log(reply.id)
+                                await api.deleteReply(reply.id)
+                                const data = await api.loadData();
+                                setQuestions(data);
+                            }}>
+                                <button type='submit'>Delete reply</button>
+                            </form>
                         </div>
                     ))}
 
                 </li>
             </ul>
-            {question.solved == false &&
+            {question.solved === false &&
                 <form onSubmit={async (e) => {
                     e.preventDefault();
                     const reply = prompt("Enter your answer:");

@@ -7,6 +7,7 @@ import Register from './components/Register'
 import Questions from './components/Questions'
 import Users from './components/Users'
 import PublicUsers from './components/PublicUsers'
+import Welcome from './components/Welcome'
 
 const router = createBrowserRouter([
     {
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
     {
         path: "/user/me",
         element: <Users />
+    },
+    {
+        path: "/home",
+        element: <Welcome />
     }
 ])
 

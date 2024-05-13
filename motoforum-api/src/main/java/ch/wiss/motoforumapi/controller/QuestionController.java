@@ -29,7 +29,9 @@ import ch.wiss.motoforumapi.request.QuestionRequest;
 import ch.wiss.motoforumapi.security.JwtUtils;
 import ch.wiss.motoforumapi.security.MessageResponse;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
 
+// Controller für die Question
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/question")
@@ -45,6 +47,8 @@ public class QuestionController {
 
     ObjectMapper om = new ObjectMapper();
 
+    // Neue Frage fragen
+    @Transactional
     @PostMapping("/ask")
     public ResponseEntity<?> askQuestion(HttpServletRequest request, @RequestBody String question) {
         try {
@@ -71,6 +75,7 @@ public class QuestionController {
         }
     }
 
+    // Alle Fragen von der Datenbank hohlen
     @GetMapping("/getall")
     public List<QuestionDTO> getAllQuestionsWithReplies() {
         List<Question> questions = qr.findAll(); // Fetch all questions
@@ -97,13 +102,12 @@ public class QuestionController {
         return questionDTOs;
     }
 
+    // Falls diese Funktion für später gebraucht wird kann man mit dieser eine Frage hohlen
     @GetMapping("/getone/{questionId}")
     public QuestionDTO getOneQuestionWithReplies(@PathVariable int questionId) {
         List<Question> questions = qr.findAll(); // Fetch all questions
 
-        // Choose one question from the list (You can implement any logic here to choose
-        // the question)
-        Question question = questions.get(questionId-1); // For simplicity, let's just choose the first question
+        Question question = questions.get(questionId-1);
 
         QuestionDTO questionDTO = new QuestionDTO();
         questionDTO.setId(question.getId());
@@ -124,7 +128,8 @@ public class QuestionController {
         return questionDTO;
     }
 
-    // Delete Question
+    // Frage mit der ID im path löschen
+    @Transactional
     @DeleteMapping("/delete/{questionToDeleteId}")
     public ResponseEntity<?> deleteQuestion(HttpServletRequest request, @PathVariable Long questionToDeleteId) {
         try {

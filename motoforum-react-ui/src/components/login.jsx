@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import {Link} from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
-import NavMenu from './MainNav';
+import UnauthedNavMenu from './UnauthedMainNav';
 
 
 const baseUrl = "http://localhost:8080/"
@@ -39,7 +39,7 @@ const Login = () => {
 
     return (
         <>
-            <NavMenu />
+            <UnauthedNavMenu />
             <div>
                 <h1>Login</h1>
                 <form onSubmit={handleSubmit}>

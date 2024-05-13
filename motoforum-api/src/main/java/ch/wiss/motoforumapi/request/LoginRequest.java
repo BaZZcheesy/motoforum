@@ -1,5 +1,6 @@
 package ch.wiss.motoforumapi.request;
 
+// Objekt um ein Loginrequest Body abzufüllen
 public class LoginRequest {
     private String username;
     private String password;

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import {Link} from "react-router-dom";
-import NavMenu from "./MainNav";
+import UnauthedNavMenu from "./UnauthedMainNav";
 import { useNavigate } from 'react-router-dom';
 
 
@@ -52,9 +52,9 @@ const Register = () => {
 
     return (
         <>
-            <NavMenu />
+            <UnauthedNavMenu />
             <div>
-                <h1>Register</h1>
+                <h1 className="headline">Register</h1>
                 <form onSubmit={handleSubmit}>
                     <label>Username</label>
                     <input type="text"

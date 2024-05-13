@@ -26,7 +26,9 @@ import ch.wiss.motoforumapi.request.EditRequest;
 import ch.wiss.motoforumapi.security.JwtUtils;
 import ch.wiss.motoforumapi.security.MessageResponse;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
 
+// Controller um user zu editieren, löschen und hohlen
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/user")
@@ -40,6 +42,7 @@ public class UserController {
     @Autowired
     AuthenticationManager authenticationManager;
 
+    // Persönlicher User anhand des JWT Token identifizieren und dem frontend die passenden daten senden
     @GetMapping("/me")
     public ResponseEntity<?> getUserByToken(HttpServletRequest request) {
         String token = request.getHeader("Authorization").replace("Bearer ", "");
@@ -56,6 +59,7 @@ public class UserController {
                 .body(new MessageResponse("We could not validate your jwt token"));
     }
 
+    // User anhand der ID im path identifizieren
     @GetMapping("/byId/{userId}")
     public ResponseEntity<?> getUser(HttpServletRequest request, @PathVariable Long userId) {
         try {
@@ -92,7 +96,8 @@ public class UserController {
         }
     }
 
-    // Update property
+    // Update eines User properties
+    @Transactional
     @PutMapping("/{userId}/{valueToUpdate}")
     public ResponseEntity<?> updateValue(HttpServletRequest request, @RequestBody String requestBody,
             @PathVariable("userId") Long id,
@@ -162,6 +167,7 @@ public class UserController {
     }
 
     // Delete User
+    @Transactional
     @DeleteMapping("/delete/{userToDeleteId}")
     public ResponseEntity<?> deleteUser(HttpServletRequest request, @PathVariable Long userToDeleteId) {
         try {

@@ -1,5 +1,6 @@
 package ch.wiss.motoforumapi.request;
 
+// Objekt um ein Replyrequest Body abzufüllen
 public class ReplyRequest {
     private String reply;
     private Long questionId;

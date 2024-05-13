@@ -1,5 +1,6 @@
 package ch.wiss.motoforumapi.request;
 
+// Objekt um ein Questionrequest Body abzufüllen
 public class QuestionRequest {
     public String question;
     public String token;

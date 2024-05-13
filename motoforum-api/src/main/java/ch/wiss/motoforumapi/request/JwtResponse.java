@@ -1,5 +1,6 @@
 package ch.wiss.motoforumapi.request;
 
+// Objekt um ein JwtResponse Body abzufüllen
 public class JwtResponse {
     private String jwt;
 
